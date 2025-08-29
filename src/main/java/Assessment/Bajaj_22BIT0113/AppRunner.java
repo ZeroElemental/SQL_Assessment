@@ -12,12 +12,10 @@ public class AppRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("Application has started. Beginning the process...");
 
-        // === Part 1: Generate the Webhook ===
         RestTemplate restTemplate = new RestTemplate();
         String generateUrl = "https://bfhldevapigw.healthrx.co.in/hiring/generateWebhook/JAVA";
 
-        // *** IMPORTANT: FILL IN YOUR DETAILS HERE ***
-        RegistrationRequest registration = new RegistrationRequest("Your Name", "REG12347", "your.email@example.com");
+        RegistrationRequest registration = new RegistrationRequest("Shreyash Anand", "22BIT0113", "anandshreyash747@gmail.com");
 
         HttpEntity<RegistrationRequest> requestEntity = new HttpEntity<>(registration);
 
@@ -31,26 +29,15 @@ public class AppRunner implements CommandLineRunner {
         System.out.println("Successfully received webhook URL: " + webhookResponse.getWebhookURL());
         System.out.println("Successfully received accessToken.");
 
-        // === Part 2: Determine and Solve the SQL Problem ===
-        String regNo = registration.getRegNo();
-        int lastTwoDigits = Integer.parseInt(regNo.substring(regNo.length() - 2));
 
         String finalSqlQuery;
-        if (lastTwoDigits % 2 != 0) {
-            // Odd Number Logic for Question 1
-            System.out.println("Registration number " + regNo + " ends in an odd number. Using solution for Question 1.");
-            // *** THE SQL QUERY IS PASTED HERE ***
-            finalSqlQuery = "SELECT p.AMOUNT AS SALARY, CONCAT(e.FIRST_NAME, ' ', e.LAST_NAME) AS NAME, TIMESTAMPDIFF(YEAR, e.DOB, CURDATE()) AS AGE, d.DEPARTMENT_NAME FROM PAYMENTS p JOIN EMPLOYEE e ON p.EMP_ID = e.EMP_ID JOIN DEPARTMENT d ON e.DEPARTMENT = d.DEPARTMENT_ID WHERE EXTRACT(DAY FROM p.PAYMENT_TIME) != 1 ORDER BY p.AMOUNT DESC LIMIT 1;";
-        } else {
-            // Even Number Logic for Question 2
-            System.out.println("Registration number " + regNo + " ends in an even number. Using solution for Question 2.");
-            // If your number is even, you would solve Question 2 and paste its query here.
-            finalSqlQuery = "REPLACE_THIS_WITH_YOUR_SQL_QUERY_FOR_QUESTION_2";
-        }
+        
+            
+        finalSqlQuery = "SELECT p.AMOUNT AS SALARY, CONCAT(e.FIRST_NAME, ' ', e.LAST_NAME) AS NAME, TIMESTAMPDIFF(YEAR, e.DOB, CURDATE()) AS AGE, d.DEPARTMENT_NAME FROM PAYMENTS p JOIN EMPLOYEE e ON p.EMP_ID = e.EMP_ID JOIN DEPARTMENT d ON e.DEPARTMENT = d.DEPARTMENT_ID WHERE EXTRACT(DAY FROM p.PAYMENT_TIME) != 1 ORDER BY p.AMOUNT DESC LIMIT 1;";
+        
         
         System.out.println("Final SQL Query to be submitted: " + finalSqlQuery);
 
-        // === Part 3: Submit the Solution ===
         String submitUrl = webhookResponse.getWebhookURL();
         String accessToken = webhookResponse.getAccessToken();
 
@@ -74,7 +61,6 @@ public class AppRunner implements CommandLineRunner {
     }
 }
 
-// === Helper Classes for JSON Bodies (No changes needed here) ===
 
 class RegistrationRequest {
     private String name;
